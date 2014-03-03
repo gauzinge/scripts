@@ -1,0 +1,1 @@
+Repository with scripts used to mass -process CBC DAQ Data with the CMSSW Modules from CMSSW-src repo. The repo also includes root analysis scripts for very basic extraction of parameters from the CMSSW analysis results.
