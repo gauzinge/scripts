@@ -1,13 +1,4 @@
-#ifndef read_histograms_cc_
-#define read_histograms_cc_
-
-#include <TROOT.h>
-#include <TKey.h>
-#include <TList.h>
-#include <TFile.h>
-#include <TSystemDirectory.h>
-#include <vector>
-#include <iostream>
+#include "read_histograms.h"
 
 
 TH1D* get_histogram(std::string filename, std::string foldername, std::string histoname)
@@ -36,4 +27,3 @@ TH1D* get_histogram(std::string filename, std::string foldername, std::string hi
 	return NULL;
 }
 
-#endif
