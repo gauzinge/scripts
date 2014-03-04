@@ -170,7 +170,7 @@ int main(int argc, char** argv)
 	
 	// Canvas
 	TCanvas* stackcanvas = new TCanvas("stackcanvas","Simulation vs. Measurement");
-	stackcanvas->SetWindowSize(1000,800);
+	stackcanvas->SetWindowSize(900,700);
 	stackcanvas->SetCanvasSize(800,600);
 	stackcanvas->Connect("Closed()","TApplication", &app,"Terminate()");
 	stackcanvas->Divide(2,2);
@@ -189,7 +189,7 @@ int main(int argc, char** argv)
 		solution thesolution = fit_nhit_histo(datahisto);
 
 		datahisto->SetLineColor(2);
-		thesolution.simhisto->SetLineColor(padcounter+5);
+		thesolution.simhisto->SetLineColor(padcounter+8);
 		thesolution.nocmhisto->SetLineColor(3);
 		stackcanvas->cd(padcounter);
 		std::string title;
@@ -206,7 +206,8 @@ int main(int argc, char** argv)
 		hs->Add(datahisto,"AH");
 		hs->Add(thesolution.simhisto,"AH");
 		hs->Add(thesolution.nocmhisto,"AH");
-		hs->Draw("nostack AH");
+		hs->Draw("nostack");
+		hs->GetXaxis()->SetTitle("# of Hits");
 
 		if (padcounter == 1)
 		{
@@ -225,11 +226,14 @@ int main(int argc, char** argv)
 	aLegend->Draw();
 	stackcanvas->Update();
 	
-	app.Run();
-	
 	// Save
 	std::string resultfilename = "/afs/cern.ch/user/g/gauzinge/tb_data/results/run" + run_no_string + "_cmAnalyis.root";
+	std::string pdffilename =  "/afs/cern.ch/user/g/gauzinge/tb_data/results/run" + run_no_string + "_cmAnalyis.pdf";
 	stackcanvas->SaveAs(resultfilename.c_str());
+	stackcanvas->SaveAs(pdffilename.c_str());
+	
+	app.Run();
+	
 	return 0;
 }
 #endif
