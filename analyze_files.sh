@@ -25,8 +25,10 @@ if [[ $# -ne 0 ]];
 	for i in $*
 	do
 		echo 'Processing '$i':'
-		echo 'cmsRun CBC_Analysis.py' $homedir$i
-		cmsRun CBC_Analysis.py $homedir$i
+		# echo 'cmsRun CBC_Analysis.py' $homedir$i
+		# cmsRun CBC_Analysis.py $homedir$i
+		echo 'cmsRun CBC_Analysis.py' $i
+		cmsRun CBC_Analysis.py $i
 		((counter++));
 	done
 	cd

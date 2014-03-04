@@ -25,8 +25,10 @@ if [[ $# -ne 0 ]];
 	for i in $*
 	do
 		echo 'Processing '$i':'
-		echo 'CBC_StubFinder.py' $homedir$i
-		cmsRun CBC_StubFinder.py $homedir$i
+		# echo 'CBC_StubFinder.py' $homedir$i
+		# cmsRun CBC_StubFinder.py $homedir$i
+		echo 'cmsRun CBC_StubFinder.py' $i
+		cmsRun CBC_StubFinder.py $i
 		((counter++));
 	done
 	

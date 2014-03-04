@@ -27,8 +27,12 @@ if [[ $# -ne 0 ]];
 	for i in $*
 	do
 		echo 'Processing' $i':'
-		echo 'cmsRun FileConverterdattoroot.py' $homedir$i
-		cmsRun FileConverterdattoroot.py $homedir$i
+		# echo 'cmsRun FileConverterdattoroot.py' $homedir$i
+		echo 'cmsRun FileConverterdattoroot.py' $i
+		
+		# cmsRun FileConverterdattoroot.py $homedir$i
+		cmsRun FileConverterdattoroot.py $i
+		
 		((counter++));
 	done
 	cd
