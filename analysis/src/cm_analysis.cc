@@ -24,10 +24,17 @@
 #include <TGraph.h>
 #include <TMultiGraph.h>
 
-#endif
-
 #include "read_histograms.h"
 #include "plotstyle.h"
+
+#endif
+
+
+#include "read_histograms.cc"
+#include "plotstyle.cc"
+ 
+
+
 
 // std::string filename = "/afs/cern.ch/user/g/gauzinge/tb_data/results/run429_results.root";
 
@@ -135,6 +142,103 @@ solution fit_nhit_histo(TH1D* datahist) // Match Sim to Data
 	return aSolution;
 }
 
+// for use in CINT as root script!
+int cm_analysis(std::string filename, std::string cbc)
+{
+	// some filename acrobatics for results etc.
+	unsigned help = filename.find_last_of("_");
+	std::string run_no_string = filename.substr(help-3,3);
+	
+	std::cout << "Running CM Analysis for Run " << run_no_string << " on CBC " << cbc << std::endl;
+	
+	// TApp fuffaround
+    gROOT->Reset();
+	set_plotstyle();
+	gStyle->SetOptStat(1111111);
+	
+	// hardcoded!!! folder and histogramnames
+	std::string foldername = "lowlevel";
+	std::vector<std::string> histonames;
+	
+	if (cbc == "A")
+	{
+		histonames.push_back("h_n_hits_fix_t_A");
+		histonames.push_back("h_n_hits_fix_b_A");
+		histonames.push_back("h_n_hits_fix_A");
+	}
+	else
+	{
+		histonames.push_back("h_n_hits_fix_t_B");
+		histonames.push_back("h_n_hits_fix_b_B");
+		histonames.push_back("h_n_hits_fix_B");
+	}
+
+	// Canvas
+	TCanvas* stackcanvas = new TCanvas("stackcanvas","Simulation vs. Measurement");
+	stackcanvas->SetWindowSize(900,700);
+	stackcanvas->SetCanvasSize(800,600);
+	stackcanvas->Divide(2,2);
+	
+	// Legend
+	TLegend* aLegend = new TLegend(0.0156, 0.396, 0.436, 0.691, "");
+	aLegend->SetBorderSize(0);
+	aLegend->SetFillColor(kWhite);
+	aLegend->SetTextSize(0.05);
+	
+	int padcounter = 1;
+	
+	// histogram loop
+	for (std::vector<std::string>::iterator histos =  histonames.begin(); histos != histonames.end(); histos++)
+	{
+		TH1D* datahisto = get_histogram(filename, foldername, *histos);
+		solution thesolution = fit_nhit_histo(datahisto);
+
+		datahisto->SetLineColor(LC(2));
+		thesolution.simhisto->SetLineColor(LC(padcounter+3));
+		thesolution.nocmhisto->SetLineColor(LC(3));
+		stackcanvas->cd(padcounter);
+		std::string title;
+		
+		if(*histos == "h_n_hits_fix_t_B") title ="CM Noise: Data vs. Simulation top B";
+		if(*histos == "h_n_hits_fix_b_B") title = "CM Noise: Data vs. Simulation bot B";
+		if(*histos == "h_n_hits_fix_B") title = "CM Noise: Data vs. Simulation B";
+		
+		if(*histos == "h_n_hits_fix_t_A") title = "CM Noise: Data vs. Simulation top A";
+		if(*histos == "h_n_hits_fix_b_A") title = "CM Noise: Data vs. Simulation bot A";
+		if(*histos == "h_n_hits_fix_A") title = "CM Noise: Data vs. Simulation A";
+		
+		THStack* hs = new THStack("hs",title.c_str());
+		hs->Add(datahisto,"AH");
+		hs->Add(thesolution.simhisto,"AH");
+		hs->Add(thesolution.nocmhisto,"AH");
+		hs->Draw("nostack");
+		hs->GetXaxis()->SetTitle("# of Hits");
+
+		if (padcounter == 1)
+		{
+			aLegend->AddEntry(datahisto,"Data","f");
+			aLegend->AddEntry(thesolution.nocmhisto,"no CM noise","f");
+		}
+		if (padcounter < 4)
+		{
+			thesolution.simhisto->SetLineColor(padcounter+3);
+			aLegend->AddEntry(thesolution.simhisto,Form("Simulation CM fraction %.2f", thesolution.cm_fraction),"f");
+		}
+		stackcanvas->Update();
+		padcounter++;
+	}
+	stackcanvas->cd(4);
+	aLegend->Draw();
+	stackcanvas->Update();
+	
+	// Save
+	std::string resultfilename = "/afs/cern.ch/user/g/gauzinge/tb_data/results/cm_analysis/run" + run_no_string + "_" + cbc + "_cmAnalyis.root";
+	std::string pdffilename =  "/afs/cern.ch/user/g/gauzinge/tb_data/results/cm_analysis/run" + run_no_string + "_" + cbc + "_cmAnalyis.pdf";
+	stackcanvas->SaveAs(resultfilename.c_str());
+	stackcanvas->SaveAs(pdffilename.c_str());
+		
+	return 0;
+}
 
 
 void syntax(char* progname) {
@@ -253,107 +357,9 @@ int main(int argc, char** argv)
 	return 0;
 }
 
-#else
-
-// for use in CINT as root script!
-int cm_analysis(std::string filename, char cbc)
-{
-	// some filename acrobatics for results etc.
-	unsigned help = filename.find_last_of("_");
-	std::string run_no_string = filename.substr(help-3,3);
-	
-	std::cout << "Running CM Analysis for Run " << run_no_string << " on CBC " << cbc << std::endl;
-	
-	// TApp fuffaround
-    gROOT->Reset();
-	set_plotstyle();
-	gStyle->SetOptStat(1111111);
-	
-	// hardcoded!!! folder and histogramnames
-	std::string foldername = "lowlevel";
-	std::vector<std::string> histonames;
-	
-	if (cbc == 'A')
-	{
-		histonames.push_back("h_n_hits_fix_t_A");
-		histonames.push_back("h_n_hits_fix_b_A");
-		histonames.push_back("h_n_hits_fix_A");
-	}
-	else
-	{
-		histonames.push_back("h_n_hits_fix_t_B");
-		histonames.push_back("h_n_hits_fix_b_B");
-		histonames.push_back("h_n_hits_fix_B");
-	}
-
-	// Canvas
-	TCanvas* stackcanvas = new TCanvas("stackcanvas","Simulation vs. Measurement");
-	stackcanvas->SetWindowSize(900,700);
-	stackcanvas->SetCanvasSize(800,600);
-	stackcanvas->Divide(2,2);
-	
-	// Legend
-	TLegend* aLegend = new TLegend(0.0156, 0.396, 0.436, 0.691, "");
-	aLegend->SetBorderSize(0);
-	aLegend->SetFillColor(kWhite);
-	aLegend->SetTextSize(0.05);
-	
-	int padcounter = 1;
-	
-	// histogram loop
-	for (std::vector<std::string>::iterator histos =  histonames.begin(); histos != histonames.end(); histos++)
-	{
-		TH1D* datahisto = get_histogram(filename, foldername, *histos);
-		solution thesolution = fit_nhit_histo(datahisto);
-
-		datahisto->SetLineColor(LC(2));
-		thesolution.simhisto->SetLineColor(LC(padcounter+3));
-		thesolution.nocmhisto->SetLineColor(LC(3));
-		stackcanvas->cd(padcounter);
-		std::string title;
-		
-		if(*histos == "h_n_hits_fix_t_B") title ="CM Noise: Data vs. Simulation top B";
-		if(*histos == "h_n_hits_fix_b_B") title = "CM Noise: Data vs. Simulation bot B";
-		if(*histos == "h_n_hits_fix_B") title = "CM Noise: Data vs. Simulation B";
-		
-		if(*histos == "h_n_hits_fix_t_A") title = "CM Noise: Data vs. Simulation top A";
-		if(*histos == "h_n_hits_fix_b_A") title = "CM Noise: Data vs. Simulation bot A";
-		if(*histos == "h_n_hits_fix_A") title = "CM Noise: Data vs. Simulation A";
-		
-		THStack* hs = new THStack("hs",title.c_str());
-		hs->Add(datahisto,"AH");
-		hs->Add(thesolution.simhisto,"AH");
-		hs->Add(thesolution.nocmhisto,"AH");
-		hs->Draw("nostack");
-		hs->GetXaxis()->SetTitle("# of Hits");
-
-		if (padcounter == 1)
-		{
-			aLegend->AddEntry(datahisto,"Data","f");
-			aLegend->AddEntry(thesolution.nocmhisto,"no CM noise","f");
-		}
-		if (padcounter < 4)
-		{
-			thesolution.simhisto->SetLineColor(padcounter+3);
-			aLegend->AddEntry(thesolution.simhisto,Form("Simulation CM fraction %.2f", thesolution.cm_fraction),"f");
-		}
-		stackcanvas->Update();
-		padcounter++;
-	}
-	stackcanvas->cd(4);
-	aLegend->Draw();
-	stackcanvas->Update();
-	
-	// Save
-	std::string resultfilename = "/afs/cern.ch/user/g/gauzinge/tb_data/results/cm_analysis/run" + run_no_string + "_" + cbc + "_cmAnalyis.root";
-	std::string pdffilename =  "/afs/cern.ch/user/g/gauzinge/tb_data/results/cm_analysis/run" + run_no_string + "_" + cbc + "_cmAnalyis.pdf";
-	stackcanvas->SaveAs(resultfilename.c_str());
-	stackcanvas->SaveAs(pdffilename.c_str());
-		
-	return 0;
-}
-
 #endif
+
+
 
 
 // void create_map(double max_trh) //FIXME, eventually tprofile?
