@@ -107,11 +107,11 @@ solution fit_nhit_histo(TH1D* datahist) // Match Sim to Data
 		double mean_step;
 		double sigma_step;
 		
-		if (fabs(mean-simulated_mean) > 2) mean_step = 0.1;
+		if (fabs(mean-simulated_mean) > 2.6) mean_step = 0.1;
 		else if (fabs(mean-simulated_mean) <= 2 && fabs(mean-simulated_mean) > 0.5) mean_step = 0.005;
 		else if (fabs(mean-simulated_mean) <= 0.5 && fabs(mean - simulated_mean) >= limit_mean) mean_step = 0.001;
 		else mean_step = 0;
-		if (fabs(sigma-simulated_sigma) > 1.5) sigma_step = 0.1;
+		if (fabs(sigma-simulated_sigma) > 1.8) sigma_step = 0.1;
 		else if(fabs(sigma-simulated_sigma) <= 1.5 && fabs(sigma-simulated_sigma) > 0.5) sigma_step = 0.005;
 		else if(fabs(sigma-simulated_sigma) <= 0.5 && fabs(sigma-simulated_sigma) >= limit_sigma) sigma_step = 0.001;
 		else sigma_step = 0;
