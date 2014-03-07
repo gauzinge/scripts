@@ -1,11 +1,21 @@
-#ifndef __CINT__
-//Standard includes
+#ifdef ROOT_VERSION
+
+#include "read_histograms.cc"
+#include "plotstyle.cc"
+ 
+#else
+
+#include "read_histograms.h"
+#include "plotstyle.h"
+
+#endif
+
+#include <math.h>
 #include <stdio.h>
 #include <iostream>
 #include <vector>
-#include <math.h>
 #include <string>
-
+ 
 #include <TApplication.h>
 #include <TColor.h>
 #include <TROOT.h>
@@ -23,20 +33,6 @@
 #include <THStack.h>
 #include <TGraph.h>
 #include <TMultiGraph.h>
-
-#include "read_histograms.h"
-#include "plotstyle.h"
-
-#endif
-
-
-#include "read_histograms.cc"
-#include "plotstyle.cc"
- 
-
-
-
-// std::string filename = "/afs/cern.ch/user/g/gauzinge/tb_data/results/run429_results.root";
 
 
 struct solution
@@ -246,9 +242,7 @@ void syntax(char* progname) {
 }
 
 //Standalone APP
-#ifndef __CINT__
-// for use as compiled TApp
-
+#if !defined( __CINT__) && !defined (__MAKECINT__)
 int main(int argc, char** argv)
 {
 	// syntax snippet, very useful
