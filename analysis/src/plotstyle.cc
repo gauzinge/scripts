@@ -16,7 +16,7 @@ void set_plotstyle() {
     gStyle->SetCanvasBorderMode(0);
     gStyle->SetTitleSize(0.05,"xyz");
     gStyle->SetTitleFont(62,"xyz");
-    gStyle->SetTitleOffset(1,"yz");
+    gStyle->SetTitleOffset(1,"xyz");
     gStyle->SetFuncColor(2);
     gStyle->SetFuncWidth(3);
     

@@ -13,6 +13,14 @@ conditions_data::conditions_data()
 
 conditions_data::conditions_data(std::string filename)
 {
+	// initialize
+	this->foldername = "conditions";
+	this->histonames.push_back("h_stub_dut");
+	this->histonames.push_back("h_stub_fix");
+	this->histonames.push_back("h_angle_dut");
+	this->histonames.push_back("h_hv_dut");
+	this->histonames.push_back("h_hv_fix");
+	
 	TFile* fileIn = TFile::Open(filename.c_str(), "READ");
 	if (fileIn) 
 	{

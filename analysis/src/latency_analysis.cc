@@ -4,15 +4,15 @@
 // G. Auzinger, 03/2014
 #ifdef ROOT_VERSION
 
-#include "src/conditions_data.cc"
-#include "src/read_histograms.cc"
-#include "src/plotstyle.cc"
+#include "conditions_data.cc"
+#include "read_histograms.cc"
+#include "plotstyle.cc"
  
 #else
 
-#include "src/conditions_data.h"
-#include "src/read_histograms.h"
-#include "src/plotstyle.h"
+#include "conditions_data.h"
+#include "read_histograms.h"
+#include "plotstyle.h"
 
 #endif
 
@@ -34,7 +34,7 @@ std::string directoryname = "stubs";
 
 void latency_analysis ()
 {
-	set_plotstyle();
+	// set_plotstyle();
 	// map and vector of filenames, run numbes and latency settings
 
 	std::map<int,int> run_vs_latency;

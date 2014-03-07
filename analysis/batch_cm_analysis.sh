@@ -37,6 +37,7 @@ echo 'Usage: ./'$0 'CBC(AorB) input_files(including_*)'
 
 CHIPS='A B'
 WORKINGDIR='/afs/cern.ch/user/g/gauzinge/scripts/analysis/'
+
 if [ $1=="A" ]; then
 	idx=0
 	files=0
@@ -81,6 +82,6 @@ fi
 
 echo 'Done processing '$files' input files!'
 echo 'Cleaning up root shared libraries!'
-rm -rf *.d
-rm -rf *.so
+rm -rf $WORKINGDIR/src/cm_analysis_cc.d
+rm -rf $WORKINGDIR/src/cm_analysis_cc.so
 echo 'Done!'

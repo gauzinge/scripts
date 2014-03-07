@@ -25,8 +25,8 @@ public:
 	double hv_fix();
 	double hv_dut();
 private:
-	std::string foldername = "conditions";
-	std::vector<std::string> histonames {"h_stub_dut","h_stub_fix","h_angle_dut","h_hv_dut","h_hv_fix"};
+	std::string foldername;
+	std::vector<std::string> histonames;
 	int run_number;
 	int stubs_fix;
 	int stubs_dut;

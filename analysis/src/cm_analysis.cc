@@ -106,11 +106,12 @@ solution fit_nhit_histo(TH1D* datahist) // Match Sim to Data
 		double sigma_step;
 		
 		if (fabs(mean-simulated_mean) > 2.6) mean_step = 0.1;
-		else if (fabs(mean-simulated_mean) <= 2 && fabs(mean-simulated_mean) > 0.5) mean_step = 0.005;
+		else if (fabs(mean-simulated_mean) <= 2.6 && fabs(mean-simulated_mean) > 0.5) mean_step = 0.005;
 		else if (fabs(mean-simulated_mean) <= 0.5 && fabs(mean - simulated_mean) >= limit_mean) mean_step = 0.001;
 		else mean_step = 0;
+		
 		if (fabs(sigma-simulated_sigma) > 1.8) sigma_step = 0.1;
-		else if(fabs(sigma-simulated_sigma) <= 1.5 && fabs(sigma-simulated_sigma) > 0.5) sigma_step = 0.005;
+		else if(fabs(sigma-simulated_sigma) <= 1.8 && fabs(sigma-simulated_sigma) > 0.5) sigma_step = 0.005;
 		else if(fabs(sigma-simulated_sigma) <= 0.5 && fabs(sigma-simulated_sigma) >= limit_sigma) sigma_step = 0.001;
 		else sigma_step = 0;
 		
@@ -180,7 +181,7 @@ int cm_analysis(std::string filename, std::string cbc)
 	TLegend* aLegend = new TLegend(0.0156, 0.396, 0.436, 0.691, "");
 	aLegend->SetBorderSize(0);
 	aLegend->SetFillColor(kWhite);
-	aLegend->SetTextSize(0.05);
+	aLegend->SetTextSize(0.07);
 	
 	int padcounter = 1;
 	
@@ -295,7 +296,7 @@ int main(int argc, char** argv)
 	TLegend* aLegend = new TLegend(0.0156, 0.396, 0.436, 0.691, "");
 	aLegend->SetBorderSize(0);
 	aLegend->SetFillColor(kWhite);
-	// aLegend->SetTextSize(0.05);
+	aLegend->SetTextSize(0.07);
 	
 	int padcounter = 1;
 	
