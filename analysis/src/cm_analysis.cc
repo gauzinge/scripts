@@ -1,10 +1,12 @@
 #ifdef ROOT_VERSION
 
+#include "conditions_data.cc"
 #include "read_histograms.cc"
 #include "plotstyle.cc"
  
 #else
 
+#include "conditions_data.h"
 #include "read_histograms.h"
 #include "plotstyle.h"
 
@@ -141,11 +143,10 @@ solution fit_nhit_histo(TH1D* datahist) // Match Sim to Data
 // for use in CINT as root script!
 int cm_analysis(std::string filename, std::string cbc)
 {
-	// some filename acrobatics for results etc.
-	unsigned help = filename.find_last_of("_");
-	std::string run_no_string = filename.substr(help-3,3);
+	// decode conditions data
+	conditions_data mycondata(filename);
 	
-	std::cout << "Running CM Analysis for Run " << run_no_string << " on CBC " << cbc << std::endl;
+	std::cout << "Running CM Analysis for Run " << mycondata.runnumber() << " on CBC " << cbc << std::endl;
 	
 	// TApp fuffaround
     gROOT->Reset();
@@ -228,8 +229,8 @@ int cm_analysis(std::string filename, std::string cbc)
 	stackcanvas->Update();
 	
 	// Save
-	std::string resultfilename = "/afs/cern.ch/user/g/gauzinge/tb_data/results/cm_analysis/run" + run_no_string + "_" + cbc + "_cmAnalyis.root";
-	std::string pdffilename =  "/afs/cern.ch/user/g/gauzinge/tb_data/results/cm_analysis/run" + run_no_string + "_" + cbc + "_cmAnalyis.pdf";
+	std::string resultfilename = "/afs/cern.ch/user/g/gauzinge/tb_data/results/cm_analysis/run" + mycondata.runstring() + "_" + cbc + "_cmAnalyis.root";
+	std::string pdffilename =  "/afs/cern.ch/user/g/gauzinge/tb_data/results/cm_analysis/run" + mycondata.runstring() + "_" + cbc + "_cmAnalyis.pdf";
 	stackcanvas->SaveAs(resultfilename.c_str());
 	stackcanvas->SaveAs(pdffilename.c_str());
 		
@@ -242,6 +243,7 @@ void syntax(char* progname) {
 }
 
 //Standalone APP
+// #ifndef ROOT_VERSION
 #if !defined( __CINT__) && !defined (__MAKECINT__)
 int main(int argc, char** argv)
 {
@@ -253,11 +255,12 @@ int main(int argc, char** argv)
 	// some filename acrobatics for results etc.
     std::string filename=(std::string)argv[1];
 	char cbc = *argv[2];
-	unsigned help = filename.find_last_of("_");
-	std::string run_no_string = filename.substr(help-3,3);
 	
-	std::cout << "Running CM Analysis for Run " << run_no_string << " on CBC " << cbc << std::endl;
+	// decode conditions data
+	conditions_data mycondata(filename);
 	
+	std::cout << "Running CM Analysis for Run " << mycondata.runnumber() << " on CBC " << cbc << std::endl;
+		
 	// TApp fuffaround
     gROOT->Reset();
 	set_plotstyle();
@@ -341,8 +344,8 @@ int main(int argc, char** argv)
 	stackcanvas->Update();
 	
 	// Save
-	std::string resultfilename = "/afs/cern.ch/user/g/gauzinge/tb_data/results/cm_analysis/run" + run_no_string + "_" + cbc + "_cmAnalyis.root";
-	std::string pdffilename =  "/afs/cern.ch/user/g/gauzinge/tb_data/results/cm_analysis/run" + run_no_string + "_" + cbc + "_cmAnalyis.pdf";
+	std::string resultfilename = "/afs/cern.ch/user/g/gauzinge/tb_data/results/cm_analysis/run" + mycondata.runstring() + "_" + cbc + "_cmAnalyis.root";
+	std::string pdffilename =  "/afs/cern.ch/user/g/gauzinge/tb_data/results/cm_analysis/run" + mycondata.runstring() + "_" + cbc + "_cmAnalyis.pdf";
 	stackcanvas->SaveAs(resultfilename.c_str());
 	stackcanvas->SaveAs(pdffilename.c_str());
 	

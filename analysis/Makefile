@@ -18,11 +18,16 @@ lib/read_histograms.o: src/read_histograms.cc src/read_histograms.h
 lib/plotstyle.o: src/plotstyle.cc src/plotstyle.h
 	$(COMP) $(ROOTFLAGS) -c src/plotstyle.cc -o lib/plotstyle.o
 	
+lib/conditions_data.o: src/conditions_data.cc src/conditions_data.h
+	$(COMP) $(ROOTFLAGS) -c src/conditions_data.cc -o lib/conditions_data.o
+	
 cm_analysis: src/cm_analysis.cc \
 	lib/read_histograms.o \
+	lib/conditions_data.o \
 	lib/plotstyle.o
 	$(COMP) $(ROOTFLAGS) $(ROOTLIBFLAGS) \
 	src/cm_analysis.cc \
+	lib/conditions_data.o \
 	lib/plotstyle.o \
 	lib/read_histograms.o -o cm_analyis
 	
