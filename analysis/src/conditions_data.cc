@@ -9,6 +9,12 @@ conditions_data::conditions_data()
 	rotation_angle = 0;
 	voltage_fix = 0;
 	voltage_dut = 0;
+	
+	trigger_latency_dut = 0;
+	trigger_latency_fix = 0;
+	
+	vcompth_dut = 0;
+	vcompth_fix = 0;
 }
 
 conditions_data::conditions_data(std::string filename)
@@ -20,6 +26,11 @@ conditions_data::conditions_data(std::string filename)
 	this->histonames.push_back("h_angle_dut");
 	this->histonames.push_back("h_hv_dut");
 	this->histonames.push_back("h_hv_fix");
+	
+	this->histonames.push_back("h_trg_latency_dut");
+	this->histonames.push_back("h_trg_latency_fix");
+	this->histonames.push_back("h_vcth_dut");
+	this->histonames.push_back("h_vcth_fix");
 	
 	TFile* fileIn = TFile::Open(filename.c_str(), "READ");
 	if (fileIn) 
@@ -54,9 +65,44 @@ conditions_data::conditions_data(std::string filename)
 				{
 					this->voltage_dut = temphisto->GetMean();
 				}
-				else if (*histos == histonames.at(3))
+				else if (*histos == histonames.at(4))
 				{
 					this->voltage_fix = temphisto->GetMean();
+				}
+				// TRG Latency; implement check for sigma different from 1 -> different settings for both CBCS -> Error
+				else if (*histos == histonames.at(5))
+				{
+					if (temphisto->GetRMS() < 2)
+					{
+						this->trigger_latency_dut = temphisto->GetMean();
+					}
+					else std::cerr << "The CBCs on the DUT have different I2C values!" << std::endl;
+				}
+				else if (*histos == histonames.at(6))
+				{
+					if (temphisto->GetRMS() < 2)
+					{
+						this->trigger_latency_fix = temphisto->GetMean();
+					}
+					else std::cerr << "The CBCs on the DUT have different I2C values!" << std::endl;
+				}
+				
+				// VCTH; implement check for sigma different from 1 -> different settings for both CBCS -> Error
+				else if (*histos == histonames.at(7))
+				{
+					if (temphisto->GetRMS() < 2)
+					{
+						this->vcompth_dut = temphisto->GetMean();
+					}
+					else std::cerr << "The CBCs on the DUT have different I2C values!" << std::endl;
+				}
+				else if (*histos == histonames.at(8))
+				{
+					if (temphisto->GetRMS() < 2)
+					{
+						this->vcompth_fix = temphisto->GetMean();
+					}
+					else std::cerr << "The CBCs on the DUT have different I2C values!" << std::endl;
 				}
 			}
 		}
@@ -108,4 +154,40 @@ double conditions_data::hv_fix()
 double conditions_data::hv_dut()
 {
 	return this->voltage_dut;
+}
+
+int conditions_data::trg_latency_dut()
+{
+	return this->trigger_latency_dut;
+}
+
+int conditions_data::trg_latency_fix()
+{
+	return this->trigger_latency_fix;
+}
+
+int conditions_data::vcth_dut()
+{
+	return this->vcompth_dut;
+}
+
+int conditions_data::vcth_fix()
+{
+	return this->vcompth_fix;
+}
+
+double conditions_data::vcth_dut_ke()
+{
+	// 1 vcth unit ^= 2.5mV
+	// 45mV / fC
+	// 1fC ^= 6241.5093 elementary charges
+	return ((this->vcompth_dut * 2.5)/45) * 6.2415093; // in ke
+}
+
+double conditions_data::vcth_fix_ke()
+{
+	// 1 vcth unit ^= 2.5mV
+	// 45mV / fC
+	// 1fC ^= 6241.5093 elementary charges
+	return ((this->vcompth_fix * 2.5)/45) * 6.2415093; // in ke
 }

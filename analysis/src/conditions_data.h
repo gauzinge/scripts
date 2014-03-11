@@ -24,6 +24,16 @@ public:
 	double angle();
 	double hv_fix();
 	double hv_dut();
+	
+	int trg_latency_dut();
+	int trg_latency_fix();
+	
+	int vcth_dut();
+	int vcth_fix();
+	
+	double vcth_dut_ke();
+	double vcth_fix_ke();
+	
 private:
 	std::string foldername;
 	std::vector<std::string> histonames;
@@ -34,6 +44,12 @@ private:
 	double rotation_angle;
 	double voltage_fix;
 	double voltage_dut;
+
+	int trigger_latency_dut;
+	int trigger_latency_fix;
+	
+	int vcompth_dut;
+	int vcompth_fix;
 };
 
 #endif
