@@ -110,8 +110,8 @@ solution fit_nhit_histo(TH1D* datahist) // Match Sim to Data
 		else if (fabs(mean-simulated_mean) <= 0.5 && fabs(mean - simulated_mean) >= limit_mean) mean_step = 0.001;
 		else mean_step = 0;
 		
-		if (fabs(sigma-simulated_sigma) > 1.8) sigma_step = 0.1;
-		else if(fabs(sigma-simulated_sigma) <= 1.8 && fabs(sigma-simulated_sigma) > 0.5) sigma_step = 0.005;
+		if (fabs(sigma-simulated_sigma) > 2.6) sigma_step = 0.1;
+		else if(fabs(sigma-simulated_sigma) <= 2.6 && fabs(sigma-simulated_sigma) > 0.5) sigma_step = 0.005;
 		else if(fabs(sigma-simulated_sigma) <= 0.5 && fabs(sigma-simulated_sigma) >= limit_sigma) sigma_step = 0.001;
 		else sigma_step = 0;
 		
@@ -191,9 +191,9 @@ int cm_analysis(std::string filename, std::string cbc)
 		TH1D* datahisto = get_histogram(filename, foldername, *histos);
 		solution thesolution = fit_nhit_histo(datahisto);
 
-		datahisto->SetLineColor(LC(2));
-		thesolution.simhisto->SetLineColor(LC(padcounter+3));
-		thesolution.nocmhisto->SetLineColor(LC(3));
+		datahisto->SetLineColor(LC(1));
+		thesolution.simhisto->SetLineColor(LC(padcounter+4));
+		thesolution.nocmhisto->SetLineColor(LC(4));
 		stackcanvas->cd(padcounter);
 		std::string title;
 		
@@ -306,9 +306,9 @@ int main(int argc, char** argv)
 		TH1D* datahisto = get_histogram(filename, foldername, *histos);
 		solution thesolution = fit_nhit_histo(datahisto);
 
-		datahisto->SetLineColor(LC(2));
-		thesolution.simhisto->SetLineColor(LC(padcounter+3));
-		thesolution.nocmhisto->SetLineColor(LC(3));
+		datahisto->SetLineColor(LC(1));
+		thesolution.simhisto->SetLineColor(LC(padcounter+4));
+		thesolution.nocmhisto->SetLineColor(LC(4));
 		stackcanvas->cd(padcounter);
 		std::string title;
 		
