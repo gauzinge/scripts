@@ -40,6 +40,10 @@ void latency_analysis ()
 	std::map<int,int> run_vs_latency;
 	std::vector<std::string> filenames;
 
+	// if trg latency and vcth ever make it to the conditions data, i can read them as mambers of conditions_decoder which renders the map obsolete. Then I can read all necessary filenames from a .txt file!!!
+	
+	// unfortunately this is not yet implemented!
+	
 	run_vs_latency[603]=12;
 	run_vs_latency[605]=13;
 	run_vs_latency[606]=14;

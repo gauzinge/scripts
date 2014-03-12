@@ -15,6 +15,8 @@ conditions_data::conditions_data()
 	
 	vcompth_dut = 0;
 	vcompth_fix = 0;
+	
+	misc_param = 0;
 }
 
 conditions_data::conditions_data(std::string filename)
@@ -31,6 +33,8 @@ conditions_data::conditions_data(std::string filename)
 	this->histonames.push_back("h_trg_latency_fix");
 	this->histonames.push_back("h_vcth_dut");
 	this->histonames.push_back("h_vcth_fix");
+	
+	this->histonames.push_back("h_misc_parameter");
 	
 	TFile* fileIn = TFile::Open(filename.c_str(), "READ");
 	if (fileIn) 
@@ -103,6 +107,10 @@ conditions_data::conditions_data(std::string filename)
 						this->vcompth_fix = temphisto->GetMean();
 					}
 					else std::cerr << "The CBCs on the DUT have different I2C values!" << std::endl;
+				}
+				else if (*histos == histonames.at(9))
+				{
+					this->misc_param = temphisto->GetMean();
 				}
 			}
 		}
@@ -190,4 +198,9 @@ double conditions_data::vcth_fix_ke()
 	// 45mV / fC
 	// 1fC ^= 6241.5093 elementary charges
 	return ((this->vcompth_fix * 2.5)/45) * 6.2415093; // in ke
+}
+
+double conditions_data::misc_parameter()
+{
+	return this->misc_param;
 }

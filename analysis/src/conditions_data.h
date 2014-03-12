@@ -34,6 +34,8 @@ public:
 	double vcth_dut_ke();
 	double vcth_fix_ke();
 	
+	double misc_parameter();
+	
 private:
 	std::string foldername;
 	std::vector<std::string> histonames;
@@ -50,6 +52,8 @@ private:
 	
 	int vcompth_dut;
 	int vcompth_fix;
+	
+	double misc_param;
 };
 
 #endif
