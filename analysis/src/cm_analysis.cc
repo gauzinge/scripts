@@ -183,7 +183,7 @@ int cm_analysis(std::string filename, std::string cbc)
 	aLegend->SetFillColor(kWhite);
 	aLegend->SetTextSize(0.07);
 	
-	int padcounter = 1;
+	unsigned int padcounter = 1;
 	
 	// histogram loop
 	for (std::vector<std::string>::iterator histos =  histonames.begin(); histos != histonames.end(); histos++)
@@ -192,7 +192,8 @@ int cm_analysis(std::string filename, std::string cbc)
 		solution thesolution = fit_nhit_histo(datahisto);
 
 		datahisto->SetLineColor(LC(1));
-		thesolution.simhisto->SetLineColor(LC(padcounter+4));
+		datahisto->SetLineWidth(2);
+		thesolution.simhisto->SetLineColor(LC(padcounter+7));
 		thesolution.nocmhisto->SetLineColor(LC(4));
 		stackcanvas->cd(padcounter);
 		std::string title;
@@ -307,7 +308,8 @@ int main(int argc, char** argv)
 		solution thesolution = fit_nhit_histo(datahisto);
 
 		datahisto->SetLineColor(LC(1));
-		thesolution.simhisto->SetLineColor(LC(padcounter+4));
+		datahisto->SetLineWidth(2);
+		thesolution.simhisto->SetLineColor(LC(padcounter+7));
 		thesolution.nocmhisto->SetLineColor(LC(4));
 		stackcanvas->cd(padcounter);
 		std::string title;
