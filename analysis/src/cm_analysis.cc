@@ -105,8 +105,8 @@ solution fit_nhit_histo(TH1D* datahist) // Match Sim to Data
 		double mean_step;
 		double sigma_step;
 		
-		if (fabs(mean-simulated_mean) > 2.6) mean_step = 0.1;
-		else if (fabs(mean-simulated_mean) <= 2.6 && fabs(mean-simulated_mean) > 0.5) mean_step = 0.005;
+		if (fabs(mean-simulated_mean) > 3.6) mean_step = 0.1;
+		else if (fabs(mean-simulated_mean) <= 3.6 && fabs(mean-simulated_mean) > 0.5) mean_step = 0.005;
 		else if (fabs(mean-simulated_mean) <= 0.5 && fabs(mean - simulated_mean) >= limit_mean) mean_step = 0.001;
 		else mean_step = 0;
 		
@@ -183,6 +183,10 @@ int cm_analysis(std::string filename, std::string cbc)
 	aLegend->SetFillColor(kWhite);
 	aLegend->SetTextSize(0.07);
 	
+	// Save
+	std::string resultfilename = "/afs/cern.ch/user/g/gauzinge/tb_data/results/cm_analysis/run" + mycondata.runstring() + "_" + cbc + "_cmAnalyis.root";
+	TFile* resultfile =new TFile(resultfilename.c_str(),"RECREATE");
+	
 	unsigned int padcounter = 1;
 	
 	// histogram loop
@@ -206,13 +210,15 @@ int cm_analysis(std::string filename, std::string cbc)
 		if(*histos == "h_n_hits_fix_b_A") title = "CM Noise: Data vs. Simulation bot A";
 		if(*histos == "h_n_hits_fix_A") title = "CM Noise: Data vs. Simulation A";
 		
-		THStack* hs = new THStack("hs",title.c_str());
+		std::string histoname = *histos;
+		
+		THStack* hs = new THStack(histoname.c_str(),title.c_str());
 		hs->Add(datahisto,"AH");
 		hs->Add(thesolution.simhisto,"AH");
 		hs->Add(thesolution.nocmhisto,"AH");
 		hs->Draw("nostack");
 		hs->GetXaxis()->SetTitle("# of Hits");
-
+		hs->Write("",TObject::kOverwrite);
 		if (padcounter == 1)
 		{
 			aLegend->AddEntry(datahisto,"Data","f");
@@ -230,10 +236,11 @@ int cm_analysis(std::string filename, std::string cbc)
 	aLegend->Draw();
 	stackcanvas->Update();
 	
-	// Save
-	std::string resultfilename = "/afs/cern.ch/user/g/gauzinge/tb_data/results/cm_analysis/run" + mycondata.runstring() + "_" + cbc + "_cmAnalyis.root";
+	
+	stackcanvas->Write("",TObject::kOverwrite);
+	resultfile->Close();
+	
 	std::string pdffilename =  "/afs/cern.ch/user/g/gauzinge/tb_data/results/cm_analysis/run" + mycondata.runstring() + "_" + cbc + "_cmAnalyis.pdf";
-	stackcanvas->SaveAs(resultfilename.c_str());
 	stackcanvas->SaveAs(pdffilename.c_str());
 		
 	return 0;
@@ -299,6 +306,10 @@ int main(int argc, char** argv)
 	aLegend->SetFillColor(kWhite);
 	aLegend->SetTextSize(0.07);
 	
+	// Save
+	std::string resultfilename = "/afs/cern.ch/user/g/gauzinge/tb_data/results/cm_analysis/run" + mycondata.runstring() + "_" + cbc + "_cmAnalyis.root";
+	TFile* resultfile =new TFile(resultfilename.c_str(),"RECREATE");
+	
 	int padcounter = 1;
 	
 	// histogram loop
@@ -306,7 +317,7 @@ int main(int argc, char** argv)
 	{
 		TH1D* datahisto = get_histogram(filename, foldername, *histos);
 		solution thesolution = fit_nhit_histo(datahisto);
-
+		
 		datahisto->SetLineColor(LC(1));
 		datahisto->SetLineWidth(2);
 		thesolution.simhisto->SetLineColor(LC(padcounter+7));
@@ -322,13 +333,15 @@ int main(int argc, char** argv)
 		if(*histos == "h_n_hits_fix_b_A") title = "CM Noise: Data vs. Simulation bot A";
 		if(*histos == "h_n_hits_fix_A") title = "CM Noise: Data vs. Simulation A";
 		
-		THStack* hs = new THStack("hs",title.c_str());
+		std::string histoname = *histos;
+		
+		THStack* hs = new THStack(histoname.c_str(),title.c_str());
 		hs->Add(datahisto,"AH");
 		hs->Add(thesolution.simhisto,"AH");
 		hs->Add(thesolution.nocmhisto,"AH");
 		hs->Draw("nostack");
 		hs->GetXaxis()->SetTitle("# of Hits");
-
+		hs->Write("",TObject::kOverwrite);
 		if (padcounter == 1)
 		{
 			aLegend->AddEntry(datahisto,"Data","f");
@@ -346,11 +359,13 @@ int main(int argc, char** argv)
 	aLegend->Draw();
 	stackcanvas->Update();
 	
-	// Save
-	std::string resultfilename = "/afs/cern.ch/user/g/gauzinge/tb_data/results/cm_analysis/run" + mycondata.runstring() + "_" + cbc + "_cmAnalyis.root";
+	
+	stackcanvas->Write("",TObject::kOverwrite);
+	resultfile->Close();
+	
 	std::string pdffilename =  "/afs/cern.ch/user/g/gauzinge/tb_data/results/cm_analysis/run" + mycondata.runstring() + "_" + cbc + "_cmAnalyis.pdf";
-	stackcanvas->SaveAs(resultfilename.c_str());
 	stackcanvas->SaveAs(pdffilename.c_str());
+		
 	
 	app.Run();
 	

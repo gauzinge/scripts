@@ -1,6 +1,6 @@
 #!/bin/bash
 
-RUNSET="620 621"
+RUNSET="622 623 624"
 FILES="";
 for RUN in $RUNSET; do
 FILE="/datadisk/Data/closed/USC.00000$RUN*"
