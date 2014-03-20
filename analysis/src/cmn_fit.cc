@@ -66,7 +66,6 @@ TF1* fitDistribution(TH1D* hitCountHisto, int nActiveStrips)
 	
 	// retrieve the threshold from the maximum of the actual nhit distribution
 	double threshold = inverse_hitProbability(prob);
-	std::cout << "Threshold " << threshold << std::endl;
 	// initialize cmnFraction to 0 anc later extract from fit
 	double cmnFraction=0;
 	
@@ -88,11 +87,8 @@ TF1* fitDistribution(TH1D* hitCountHisto, int nActiveStrips)
 	fitProbability->FixParameter(2, hitCountHisto->GetEntries());
 	fitProbability->FixParameter(3, nActiveStrips);
 	
-	// std::cout << fitProbability->GetParameter(0) << " " << fitProbability->GetParameter(1) << " " << fitProbability->GetParameter(2) << " " << fitProbability->GetParameter(3) << " " << std::endl;
-	
 	// Fit and return
 	hitCountHisto->Fit(fitProbability,"RQMN");
-	std::cout << fitProbability->GetParameter(0) << " " << fitProbability->GetParameter(1) << " " << fitProbability->GetParameter(2) << " " << fitProbability->GetParameter(3) << " " << std::endl;
 	
 	return fitProbability;
 }

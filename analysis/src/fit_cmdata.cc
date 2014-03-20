@@ -62,7 +62,7 @@ int fit_cmdata(std::string filename, std::string cbc)
 	std::string foldername = "lowlevel";
 	std::vector<std::string> histonames;
 	
-	if (cbc == "A")
+	if (cbc == 'A')
 	{
 		histonames.push_back("h_n_hits_fix_t_A");
 		histonames.push_back("h_n_hits_fix_b_A");
@@ -88,10 +88,10 @@ int fit_cmdata(std::string filename, std::string cbc)
 	aLegend->SetTextSize(0.07);
 	
 	// Save
-	std::string resultfilename = "/afs/cern.ch/user/g/gauzinge/tb_data/results/cm_analysis/run" + mycondata.runstring() + "_" + cbc + "_cmAnalyis.root";
+	std::string resultfilename = "/afs/cern.ch/user/g/gauzinge/tb_data/results/cm_analysis/run" + mycondata.runstring() + "_cmAnalyis.root";
 	TFile* resultfile =new TFile(resultfilename.c_str(),"RECREATE");
 	
-	unsigned int padcounter = 1;
+	int padcounter = 1;
 	
 	// histogram loop
 	for (std::vector<std::string>::iterator histos =  histonames.begin(); histos != histonames.end(); histos++)
@@ -100,12 +100,6 @@ int fit_cmdata(std::string filename, std::string cbc)
 		TH1D* datahisto = get_histogram(filename, foldername, *histos);
 		datahisto->SetLineColor(LC(1));
 		datahisto->SetLineWidth(2);
-		
-		TF1* fit = fitDistribution(datahisto, mybadstrips.n_active_strips(*histos));
-		double threshold = fit->GetParameter(0);
-		double cm_fraction = fit->GetParameter(1);
-		
-		TH1D* no_cm_histo = createNoiseDistribution(threshold, cm_fraction, datahisto->GetEntries(), mybadstrips.n_active_strips(*histos));
 		
 		std::string title;
 		
@@ -118,17 +112,31 @@ int fit_cmdata(std::string filename, std::string cbc)
 		if(*histos == "h_n_hits_fix_B") title = "CM Noise: Data vs. Simulation B";
 		
 		std::string histoname = *histos;
+		std::string fitname = histoname + "_fit";
 		
 		resultfile->cd();
 		
 		stackcanvas->cd(padcounter);
 		THStack* hs = new THStack(histoname.c_str(),title.c_str());
-		hs->Add(datahisto,"AH");
-		hs->Add(no_cm_histo,"AH");
+		hs->Add(datahisto);
+		
+		TF1* fit = fitDistribution(datahisto, mybadstrips.n_active_strips(*histos));
+		fit->SetLineColor(LC(padcounter+7));
+		fit->SetLineWidth(2);
+		double threshold = fit->GetParameter(0);
+		double cm_fraction = fit->GetParameter(1);
+		
+		TH1D* no_cm_histo = createNoiseDistribution(threshold, 0, datahisto->GetEntries(), mybadstrips.n_active_strips(*histos));
+		no_cm_histo->SetLineColor(LC(11));
+		
+		hs->Add(no_cm_histo);
 		hs->Draw("nostack");
-		fit->Draw("same");
 		hs->GetXaxis()->SetTitle("# of Hits");
-			
+		fit->Draw("same");
+		
+		hs->Write("",TObject::kOverwrite);
+		fit->Write(fitname.c_str(),TObject::kOverwrite);
+		
 		if (padcounter == 1)
 		{
 			aLegend->AddEntry(datahisto,"Data","f");
@@ -136,24 +144,22 @@ int fit_cmdata(std::string filename, std::string cbc)
 		}
 		if (padcounter < 4)
 		{
-			aLegend->AddEntry(fit,Form("Fit CM fraction %.2f", cm_fraction),"f");
+			aLegend->AddEntry(fit,Form("Fit CM fraction %.2f", fabs(cm_fraction)),"l");
 		}
 		stackcanvas->Update();
 		padcounter++;
-			
-		// hsa->Write("",TObject::kOverwrite);
 	}
 	
 	stackcanvas->cd(4);
-	aLegend->Draw();
+	aLegend->Draw("same");
 	stackcanvas->Update();
 	
-	
 	stackcanvas->Write("",TObject::kOverwrite);
-	resultfile->Close();
 	
 	std::string pdffilename =  "/afs/cern.ch/user/g/gauzinge/tb_data/results/cm_analysis/run" + mycondata.runstring() + "_" + cbc + "_cmAnalyis.pdf";
 	stackcanvas->SaveAs(pdffilename.c_str());
+	
+	resultfile->Close();
 	
 	return 0;
 }
@@ -223,10 +229,10 @@ int main(int argc, char** argv)
 	aLegend->SetFillColor(kWhite);
 	aLegend->SetTextSize(0.07);
 	
-	// // Save
-	// std::string resultfilename = "/afs/cern.ch/user/g/gauzinge/tb_data/results/cm_analysis/run" + mycondata.runstring() + "_" + cbc + "_cmAnalyis.root";
-	// TFile* resultfile =new TFile(resultfilename.c_str(),"RECREATE");
-	// 
+	// Save
+	std::string resultfilename = "/afs/cern.ch/user/g/gauzinge/tb_data/results/cm_analysis/run" + mycondata.runstring() + "_cmAnalyis.root";
+	TFile* resultfile =new TFile(resultfilename.c_str(),"RECREATE");
+	
 	int padcounter = 1;
 	
 	// histogram loop
@@ -248,12 +254,13 @@ int main(int argc, char** argv)
 		if(*histos == "h_n_hits_fix_B") title = "CM Noise: Data vs. Simulation B";
 		
 		std::string histoname = *histos;
+		std::string fitname = histoname + "_fit";
 		
-		// resultfile->cd();
+		resultfile->cd();
 		
 		stackcanvas->cd(padcounter);
 		THStack* hs = new THStack(histoname.c_str(),title.c_str());
-		hs->Add(datahisto,"AH");
+		hs->Add(datahisto);
 		
 		TF1* fit = fitDistribution(datahisto, mybadstrips.n_active_strips(*histos));
 		fit->SetLineColor(LC(padcounter+7));
@@ -264,11 +271,14 @@ int main(int argc, char** argv)
 		TH1D* no_cm_histo = createNoiseDistribution(threshold, 0, datahisto->GetEntries(), mybadstrips.n_active_strips(*histos));
 		no_cm_histo->SetLineColor(LC(11));
 		
-		hs->Add(no_cm_histo,"AH");
+		hs->Add(no_cm_histo);
 		hs->Draw("nostack");
-		fit->Draw("same");
 		hs->GetXaxis()->SetTitle("# of Hits");
-			
+		fit->Draw("same");
+		
+		hs->Write("",TObject::kOverwrite);
+		fit->Write(fitname.c_str(),TObject::kOverwrite);
+		
 		if (padcounter == 1)
 		{
 			aLegend->AddEntry(datahisto,"Data","f");
@@ -283,18 +293,18 @@ int main(int argc, char** argv)
 	}
 	
 	stackcanvas->cd(4);
-	aLegend->Draw();
+	aLegend->Draw("same");
 	stackcanvas->Update();
 	
 	
-	// stackcanvas->Write("",TObject::kOverwrite);
-	// resultfile->Close();
+	stackcanvas->Write("",TObject::kOverwrite);
 	
 	std::string pdffilename =  "/afs/cern.ch/user/g/gauzinge/tb_data/results/cm_analysis/run" + mycondata.runstring() + "_" + cbc + "_cmAnalyis.pdf";
 	stackcanvas->SaveAs(pdffilename.c_str());
 	
 	app.Run();
-		
+	resultfile->Close();
+	
 	return 0;
 }
 
