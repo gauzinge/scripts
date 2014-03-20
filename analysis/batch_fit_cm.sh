@@ -32,25 +32,25 @@ export PATH="~/bin:$PATH"
 
 # actual script
 
-echo 'Submitter script for CM Analysis to LXBATCH!'
-echo 'Usage: ./'$0 'CBC(AorB) input_files(including_*)'
+echo 'Submitter script for CM Fit to LXBATCH!'
+echo 'Usage: ./'$0 ' input_files(including_*)'
 
 WORKINGDIR='/afs/cern.ch/user/g/gauzinge/scripts/analysis/'
 
 
 for i in $*; do
 	echo 'Submitting Analysis for file' $i', CBC A!'
-	echo 'root -b -q -l src/cm_analysis.cc+('"'$i'","'A'"')'
-	root -b -q -l $WORKINGDIR'src/cm_analysis.cc+("'$i'","'A'")'
+	echo 'root -b -q -l src/fit_cmdata.cc+('"'$i'","'A'"')'
+	root -b -q -l $WORKINGDIR'src/fit_cmdata.cc+("'$i'","'A'")'
 	echo 'Submitting Analysis for file' $i', CBC B!'
-	echo 'root -b -q -l src/cm_analysis.cc+('"'$i'","'B'"')'
-	# root -b -q -l $WORKINGDIR'src/cm_analysis.cc+("'$i'","'B'")'
+	echo 'root -b -q -l src/fit_cmdata.cc+('"'$i'","'B'"')'
+	root -b -q -l $WORKINGDIR'src/fit_cmdata.cc+("'$i'","'B'")'
 	files=$((files+1))
 done
 
 
 echo 'Done processing '$files' input files!'
 echo 'Cleaning up root shared libraries!'
-rm -rf $WORKINGDIR/src/cm_analysis_cc.d
-rm -rf $WORKINGDIR/src/cm_analysis_cc.so
+rm -rf $WORKINGDIR/src/fit_cmdata_cc.d
+rm -rf $WORKINGDIR/src/fit_cmdata_cc.so
 echo 'Done!'
