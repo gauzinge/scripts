@@ -56,6 +56,7 @@ conditions_data::conditions_data(std::string filename)
 				if (*histos == histonames.at(0)) // #stubs dut
 				{
 					this->stubs_dut = temphisto->GetBinContent(2); // no info on how many stubs per event but on #of events w. stubs
+					this->n_events = temphisto->GetEntries(); // could be any histogram
 				}
 				else if (*histos == histonames.at(1)) // #stubs fix
 				{
@@ -137,6 +138,11 @@ std::string conditions_data::runstring()
 	std::stringstream ss;
 	ss << this->run_number;
 	return ss.str();
+}
+
+int conditions_data::nEvents()
+{
+	return this->n_events;
 }
 
 int conditions_data::n_stubs_fix()

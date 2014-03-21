@@ -19,6 +19,7 @@ public:
 	
 	int runnumber();
 	std::string runstring();
+	int nEvents();
 	int n_stubs_fix();
 	int n_stubs_dut();
 	double angle();
@@ -40,6 +41,7 @@ private:
 	std::string foldername;
 	std::vector<std::string> histonames;
 	int run_number;
+	int n_events;
 	int stubs_fix;
 	int stubs_dut;
 	
