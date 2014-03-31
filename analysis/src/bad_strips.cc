@@ -65,6 +65,28 @@ bad_strips::bad_strips(std::string bad_strip_file)
 			if (*it >= 127 && map_it->first == 51012) fix_n_masked_bot_B++, fix_n_masked_B++;// cbc B on top sensor
 		}
 		std::cout << std::endl;
+		
+		// for (int i = 0; i < 127; i++)
+// 		{
+// 			if (map_it->second.find(i) != map_it->second.end()) // strip i is not a bad strip
+// 			{
+// 				this->good_strip_map["h_n_hits_dut_t_A"].insert(i);
+// 				this->good_strip_map["h_n_hits_dut_t_B"].insert(i+127); // strips > 127 connected to CBC B
+// 				this->good_strip_map["h_n_hits_dut_b_A"].insert(i);
+// 				this->good_strip_map["h_n_hits_dut_b_B"].insert(i+127); // strips > 127 connected to CBC B
+// 			}
+// 		}
+// 		
+// 		for (int i = 0; i < 254; i++)
+// 		{
+// 			if (map_it->second.find(i) != map_it->second.end()) // strip i is not a bad strip
+// 			{
+// 				this->good_strip_map["h_n_hits_dut_A"]  
+// 				this->good_strip_map["h_n_hits_dut_B"]  
+// 			}
+// 
+// 		
+// 		}
 	}
 	
 	// fill the map string vs active strips

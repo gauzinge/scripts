@@ -16,6 +16,7 @@ public:
 	bool strip_bad(int sensor, int strip);
 private:
 	std::map<int, std::set<int> > bad_strip_map;
+	// std::map<std::string, std::set<int> > good_strip_map;
 	std::map<std::string, int> active_strips;
 };
 

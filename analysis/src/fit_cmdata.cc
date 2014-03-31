@@ -5,6 +5,8 @@
 #include "cmn_fit.cc"
 #include "bad_strips.cc"
 #include "plotstyle.cc"
+#include "hit_prob.cc"
+#include "cm_toy.cc"
  
 #else
 
@@ -13,6 +15,8 @@
 #include "cmn_fit.h"
 #include "bad_strips.h"
 #include "plotstyle.h"
+#include "hit_prob.h"
+#include "cm_toy.h"
 
 #endif
 
@@ -123,13 +127,31 @@ int fit_cmdata(std::string filename, std::string cbc)
 		TF1* fit = fitDistribution(datahisto, mybadstrips.n_active_strips(*histos));
 		fit->SetLineColor(LC(padcounter+7));
 		fit->SetLineWidth(2);
-		double threshold = fit->GetParameter(0);
+		// double threshold = fit->GetParameter(0);
 		double cm_fraction = fit->GetParameter(1);
 		
-		TH1D* no_cm_histo = createNoiseDistribution(threshold, 0, datahisto->GetEntries(), mybadstrips.n_active_strips(*histos));
-		no_cm_histo->SetLineColor(LC(11));
+		// TH1D* no_cm_histo = createNoiseDistribution(threshold, 0, datahisto->GetEntries(), mybadstrips.n_active_strips(*histos));
+// 		no_cm_histo->SetLineColor(LC(11));
+		// hs->Add(no_cm_histo);
 		
-		hs->Add(no_cm_histo);
+		//now simulate 
+		TH1D* thresholdhisto = NULL;
+		TH1D* simhisto = NULL;
+		// check that I only use the histograms for top or bottom sensor
+		if (*histos != "h_n_hits_fix_B" && *histos != "h_n_hits_fix_A") 
+		{
+			std::string temphistoname = *histos;
+			// check if *histos points to top or bottom sensor and retrieve hitprofile accordingly
+			std::string hitprofilename;
+			if (temphistoname.find("_t") != std::string::npos) hitprofilename = "h_hits_FIX_t";
+			else if (temphistoname.find("_b") != std::string::npos) hitprofilename = "h_hits_FIX_b";
+			
+			thresholdhisto = get_hit_prob(filename, hitprofilename);
+			simhisto = cmnTest(datahisto->GetEntries(), 1, 0, *histos, thresholdhisto);
+			simhisto->SetLineColor(LC(11));
+			hs->Add(simhisto);
+		}
+		
 		hs->Draw("nostack");
 		hs->GetXaxis()->SetTitle("# of Hits");
 		fit->Draw("same");
@@ -140,7 +162,7 @@ int fit_cmdata(std::string filename, std::string cbc)
 		if (padcounter == 1)
 		{
 			aLegend->AddEntry(datahisto,"Data","f");
-			aLegend->AddEntry(no_cm_histo,"no CM noise","f");
+			aLegend->AddEntry(simhisto,"no CM noise","f");
 		}
 		if (padcounter < 4)
 		{
@@ -265,13 +287,31 @@ int main(int argc, char** argv)
 		TF1* fit = fitDistribution(datahisto, mybadstrips.n_active_strips(*histos));
 		fit->SetLineColor(LC(padcounter+7));
 		fit->SetLineWidth(2);
-		double threshold = fit->GetParameter(0);
+		// double threshold = fit->GetParameter(0);
 		double cm_fraction = fit->GetParameter(1);
 		
-		TH1D* no_cm_histo = createNoiseDistribution(threshold, 0, datahisto->GetEntries(), mybadstrips.n_active_strips(*histos));
-		no_cm_histo->SetLineColor(LC(11));
+		// TH1D* no_cm_histo = createNoiseDistribution(threshold, 0, datahisto->GetEntries(), mybadstrips.n_active_strips(*histos));
+// 		no_cm_histo->SetLineColor(LC(11));
+		// hs->Add(no_cm_histo);
 		
-		hs->Add(no_cm_histo);
+		//now simulate 
+		TH1D* thresholdhisto = NULL;
+		TH1D* simhisto = NULL;
+		// check that I only use the histograms for top or bottom sensor
+		if (*histos != "h_n_hits_fix_B" && *histos != "h_n_hits_fix_A") 
+		{
+			std::string temphistoname = *histos;
+			// check if *histos points to top or bottom sensor and retrieve hitprofile accordingly
+			std::string hitprofilename;
+			if (temphistoname.find("_t") != std::string::npos) hitprofilename = "h_hits_FIX_t";
+			else if (temphistoname.find("_b") != std::string::npos) hitprofilename = "h_hits_FIX_b";
+			
+			thresholdhisto = get_hit_prob(filename, hitprofilename);
+			simhisto = cmnTest(datahisto->GetEntries(), 1, 0, *histos, thresholdhisto);
+			simhisto->SetLineColor(LC(11));
+			hs->Add(simhisto);
+		}
+		
 		hs->Draw("nostack");
 		hs->GetXaxis()->SetTitle("# of Hits");
 		fit->Draw("same");
@@ -282,7 +322,7 @@ int main(int argc, char** argv)
 		if (padcounter == 1)
 		{
 			aLegend->AddEntry(datahisto,"Data","f");
-			aLegend->AddEntry(no_cm_histo,"no CM noise","f");
+			aLegend->AddEntry(simhisto,"no CM noise","f");
 		}
 		if (padcounter < 4)
 		{

@@ -27,18 +27,28 @@ lib/conditions_data.o: src/conditions_data.cc src/conditions_data.h
 lib/bad_strips.o: src/bad_strips.cc src/bad_strips.h
 	$(COMP) $(ROOTFLAGS) -c src/bad_strips.cc -o lib/bad_strips.o
 	
+lib/hit_prob.o: src/hit_prob.cc src/hit_prob.h
+	$(COMP) $(ROOTFLAGS) -c src/hit_prob.cc -o lib/hit_prob.o
+	
+lib/cm_toy.o: src/cm_toy.cc src/cm_toy.h
+	$(COMP) $(ROOTFLAGS) -c src/cm_toy.cc -o lib/cm_toy.o
+	
 fit_cmdata: src/fit_cmdata.cc \
 	lib/read_histograms.o \
 	lib/cmn_fit.o \
 	lib/conditions_data.o \
 	lib/bad_strips.o \
-	lib/plotstyle.o
+	lib/plotstyle.o \
+	lib/hit_prob.o \
+	lib/cm_toy.o
 	$(COMP) $(ROOTFLAGS) $(ROOTLIBFLAGS) \
 	src/fit_cmdata.cc \
 	lib/cmn_fit.o \
 	lib/conditions_data.o \
 	lib/plotstyle.o \
 	lib/bad_strips.o \
+	lib/hit_prob.o \
+	lib/cm_toy.o \
 	lib/read_histograms.o -o fit_cm_data
 	
 cm_analysis: src/cm_analysis.cc \
