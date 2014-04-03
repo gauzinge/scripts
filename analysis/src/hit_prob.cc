@@ -1,31 +1,17 @@
-// #ifdef ROOT_VERSION
+#ifdef ROOT_VERSION
+
+#include "conditions_data.cc"
+#include "read_histograms.cc"
+#include "cmn_fit.cc"
+#include "bad_strips.cc"
+#include "plotstyle.cc"
+
+#else
 
 #include "hit_prob.h"
-// #include "conditions_data.cc"
-// #include "read_histograms.cc"
-// #include "cmn_fit.cc"
-// #include "bad_strips.cc"
-// #include "plotstyle.cc"
-//  
-// #else
-// 
-// #include "conditions_data.h"
-// #include "read_histograms.h"
-// #include "cmn_fit.h"
-// #include "bad_strips.h"
-// #include "plotstyle.h"
-// 
-// #endif
 
-// #include <math.h>
-// #include <stdio.h>
-// #include <iostream>
-// #include <vector>
-// #include <string>
-// 
-// #include <TH1D.h>
-// #include <TProfile.h>
-// #include <TCanvas.h>
+#endif
+
 
 void hit_prob(std::string filename)
 {

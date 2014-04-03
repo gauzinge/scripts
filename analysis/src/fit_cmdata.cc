@@ -63,7 +63,7 @@ int fit_cmdata(std::string filename, std::string cbc)
 	gStyle->SetOptStat(1111111);
 	
 	// hardcoded!!! folder and histogramnames
-	std::string foldername = "lowlevel";
+	std::string foldername = "cmn";
 	std::vector<std::string> histonames;
 	
 	if (cbc == 'A')
@@ -127,12 +127,12 @@ int fit_cmdata(std::string filename, std::string cbc)
 		TF1* fit = fitDistribution(datahisto, mybadstrips.n_active_strips(*histos));
 		fit->SetLineColor(LC(padcounter+7));
 		fit->SetLineWidth(2);
-		// double threshold = fit->GetParameter(0);
+		double threshold = fit->GetParameter(0);
 		double cm_fraction = fit->GetParameter(1);
 		
-		// TH1D* no_cm_histo = createNoiseDistribution(threshold, 0, datahisto->GetEntries(), mybadstrips.n_active_strips(*histos));
-// 		no_cm_histo->SetLineColor(LC(11));
-		// hs->Add(no_cm_histo);
+		TH1D* no_cm_histo = createNoiseDistribution(threshold, 0, datahisto->GetEntries(), mybadstrips.n_active_strips(*histos));
+		no_cm_histo->SetLineColor(LC(11));
+		hs->Add(no_cm_histo);
 		
 		//now simulate 
 		TH1D* thresholdhisto = NULL;
@@ -148,7 +148,7 @@ int fit_cmdata(std::string filename, std::string cbc)
 			
 			thresholdhisto = get_hit_prob(filename, hitprofilename);
 			simhisto = cmnTest(datahisto->GetEntries(), 1, 0, *histos, thresholdhisto);
-			simhisto->SetLineColor(LC(11));
+			simhisto->SetLineColor(LC(12));
 			hs->Add(simhisto);
 		}
 		
@@ -162,7 +162,9 @@ int fit_cmdata(std::string filename, std::string cbc)
 		if (padcounter == 1)
 		{
 			aLegend->AddEntry(datahisto,"Data","f");
-			aLegend->AddEntry(simhisto,"no CM noise","f");
+			aLegend->AddEntry(simhisto,"no CM, var. threshold","f");
+			aLegend->AddEntry(no_cm_histo,Form("no CM, threshold %.2f", fabs(threshold)),"l");
+			
 		}
 		if (padcounter < 4)
 		{
@@ -222,7 +224,7 @@ int main(int argc, char** argv)
 	gStyle->SetOptStat(1111111);
 	
 	// hardcoded!!! folder and histogramnames
-	std::string foldername = "lowlevel";
+	std::string foldername = "cmn";
 	std::vector<std::string> histonames;
 	
 	if (cbc == 'A')
@@ -287,12 +289,12 @@ int main(int argc, char** argv)
 		TF1* fit = fitDistribution(datahisto, mybadstrips.n_active_strips(*histos));
 		fit->SetLineColor(LC(padcounter+7));
 		fit->SetLineWidth(2);
-		// double threshold = fit->GetParameter(0);
+		double threshold = fit->GetParameter(0);
 		double cm_fraction = fit->GetParameter(1);
 		
-		// TH1D* no_cm_histo = createNoiseDistribution(threshold, 0, datahisto->GetEntries(), mybadstrips.n_active_strips(*histos));
-// 		no_cm_histo->SetLineColor(LC(11));
-		// hs->Add(no_cm_histo);
+		TH1D* no_cm_histo = createNoiseDistribution(threshold, 0, datahisto->GetEntries(), mybadstrips.n_active_strips(*histos));
+		no_cm_histo->SetLineColor(LC(11));
+		hs->Add(no_cm_histo);
 		
 		//now simulate 
 		TH1D* thresholdhisto = NULL;
@@ -308,7 +310,7 @@ int main(int argc, char** argv)
 			
 			thresholdhisto = get_hit_prob(filename, hitprofilename);
 			simhisto = cmnTest(datahisto->GetEntries(), 1, 0, *histos, thresholdhisto);
-			simhisto->SetLineColor(LC(11));
+			simhisto->SetLineColor(LC(12));
 			hs->Add(simhisto);
 		}
 		
@@ -322,7 +324,9 @@ int main(int argc, char** argv)
 		if (padcounter == 1)
 		{
 			aLegend->AddEntry(datahisto,"Data","f");
-			aLegend->AddEntry(simhisto,"no CM noise","f");
+			aLegend->AddEntry(simhisto,"no CM, var. threshold","f");
+			aLegend->AddEntry(no_cm_histo,Form("no CM, threshold %.2f", fabs(threshold)),"l");
+			
 		}
 		if (padcounter < 4)
 		{
