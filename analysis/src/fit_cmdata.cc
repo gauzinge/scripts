@@ -137,6 +137,8 @@ int fit_cmdata(std::string filename, std::string cbc)
 		//now simulate 
 		TH1D* thresholdhisto = NULL;
 		TH1D* simhisto = NULL;
+		TF1* sim_fit = NULL;
+		double sim_cm_fraction = 0;
 		// check that I only use the histograms for top or bottom sensor
 		if (*histos != "h_n_hits_fix_B" && *histos != "h_n_hits_fix_A") 
 		{
@@ -150,11 +152,17 @@ int fit_cmdata(std::string filename, std::string cbc)
 			simhisto = cmnTest(datahisto->GetEntries(), 1, 0, *histos, thresholdhisto);
 			simhisto->SetLineColor(LC(12));
 			hs->Add(simhisto);
+			
+			sim_fit = fitDistribution(simhisto, mybadstrips.n_active_strips(*histos));
+			sim_fit->SetLineColor(LC(padcounter+8));
+			sim_fit->SetLineWidth(2);
+			sim_cm_fraction = sim_fit->GetParameter(1);
 		}
 		
 		hs->Draw("nostack");
 		hs->GetXaxis()->SetTitle("# of Hits");
 		fit->Draw("same");
+		sim_fit->Draw("same");
 		
 		hs->Write("",TObject::kOverwrite);
 		fit->Write(fitname.c_str(),TObject::kOverwrite);
@@ -164,7 +172,7 @@ int fit_cmdata(std::string filename, std::string cbc)
 			aLegend->AddEntry(datahisto,"Data","f");
 			aLegend->AddEntry(simhisto,"no CM, var. threshold","f");
 			aLegend->AddEntry(no_cm_histo,Form("no CM, threshold %.2f", fabs(threshold)),"l");
-			
+			aLegend->AddEntry(sim_fit, Form("threshold variations equals to %.2f CM", fabs(sim_cm_fraction)),"l");
 		}
 		if (padcounter < 4)
 		{
@@ -299,6 +307,8 @@ int main(int argc, char** argv)
 		//now simulate 
 		TH1D* thresholdhisto = NULL;
 		TH1D* simhisto = NULL;
+		TF1* sim_fit = NULL;
+		double sim_cm_fraction = 0;
 		// check that I only use the histograms for top or bottom sensor
 		if (*histos != "h_n_hits_fix_B" && *histos != "h_n_hits_fix_A") 
 		{
@@ -312,11 +322,17 @@ int main(int argc, char** argv)
 			simhisto = cmnTest(datahisto->GetEntries(), 1, 0, *histos, thresholdhisto);
 			simhisto->SetLineColor(LC(12));
 			hs->Add(simhisto);
+			
+			sim_fit = fitDistribution(simhisto, mybadstrips.n_active_strips(*histos));
+			sim_fit->SetLineColor(LC(padcounter+8));
+			sim_fit->SetLineWidth(2);
+			sim_cm_fraction = sim_fit->GetParameter(1);
 		}
 		
 		hs->Draw("nostack");
 		hs->GetXaxis()->SetTitle("# of Hits");
 		fit->Draw("same");
+		sim_fit->Draw("same");
 		
 		hs->Write("",TObject::kOverwrite);
 		fit->Write(fitname.c_str(),TObject::kOverwrite);
@@ -326,7 +342,7 @@ int main(int argc, char** argv)
 			aLegend->AddEntry(datahisto,"Data","f");
 			aLegend->AddEntry(simhisto,"no CM, var. threshold","f");
 			aLegend->AddEntry(no_cm_histo,Form("no CM, threshold %.2f", fabs(threshold)),"l");
-			
+			aLegend->AddEntry(sim_fit, Form("threshold variations equals to %.2f CM", fabs(sim_cm_fraction)),"l");
 		}
 		if (padcounter < 4)
 		{
