@@ -45,11 +45,11 @@ bad_strips::bad_strips(std::string bad_strip_file)
 	
 	for (std::map< int, std::set<int> >::iterator map_it = bad_strip_map.begin(); map_it != bad_strip_map.end(); map_it++)
 	{
-		std::cout << "Reading bad strips for Sensor " << map_it->first << " : ";
+		// std::cout << "Reading bad strips for Sensor " << map_it->first << " : ";
 		
 		for (std::set<int>::iterator it = map_it->second.begin(); it != map_it->second.end(); it++)
 		{
-			std::cout << *it << " ";
+			// std::cout << *it << " ";
 			// DUT
 			if (*it < 127 && map_it->first == 51001) dut_n_masked_top_A++, dut_n_masked_A++;// cbc A on top sensor
 			if (*it >= 127 && map_it->first == 51001) dut_n_masked_top_B++, dut_n_masked_B++;// cbc B on top sensor
@@ -64,29 +64,7 @@ bad_strips::bad_strips(std::string bad_strip_file)
 			if (*it < 127 && map_it->first == 51012) fix_n_masked_bot_A++, fix_n_masked_A++;// cbc A on top sensor
 			if (*it >= 127 && map_it->first == 51012) fix_n_masked_bot_B++, fix_n_masked_B++;// cbc B on top sensor
 		}
-		std::cout << std::endl;
-		
-		// for (int i = 0; i < 127; i++)
-// 		{
-// 			if (map_it->second.find(i) != map_it->second.end()) // strip i is not a bad strip
-// 			{
-// 				this->good_strip_map["h_n_hits_dut_t_A"].insert(i);
-// 				this->good_strip_map["h_n_hits_dut_t_B"].insert(i+127); // strips > 127 connected to CBC B
-// 				this->good_strip_map["h_n_hits_dut_b_A"].insert(i);
-// 				this->good_strip_map["h_n_hits_dut_b_B"].insert(i+127); // strips > 127 connected to CBC B
-// 			}
-// 		}
-// 		
-// 		for (int i = 0; i < 254; i++)
-// 		{
-// 			if (map_it->second.find(i) != map_it->second.end()) // strip i is not a bad strip
-// 			{
-// 				this->good_strip_map["h_n_hits_dut_A"]  
-// 				this->good_strip_map["h_n_hits_dut_B"]  
-// 			}
-// 
-// 		
-// 		}
+		// std::cout << std::endl;
 	}
 	
 	// fill the map string vs active strips

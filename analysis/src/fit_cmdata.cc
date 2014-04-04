@@ -162,7 +162,7 @@ int fit_cmdata(std::string filename, std::string cbc)
 		hs->Draw("nostack");
 		hs->GetXaxis()->SetTitle("# of Hits");
 		fit->Draw("same");
-		sim_fit->Draw("same");
+		if (sim_fit != NULL) sim_fit->Draw("same");
 		
 		hs->Write("",TObject::kOverwrite);
 		fit->Write(fitname.c_str(),TObject::kOverwrite);
@@ -327,12 +327,13 @@ int main(int argc, char** argv)
 			sim_fit->SetLineColor(LC(padcounter+8));
 			sim_fit->SetLineWidth(2);
 			sim_cm_fraction = sim_fit->GetParameter(1);
+			std::cout << "SIMULATED CM FRACTION " << sim_cm_fraction << std::endl;
 		}
 		
 		hs->Draw("nostack");
 		hs->GetXaxis()->SetTitle("# of Hits");
 		fit->Draw("same");
-		sim_fit->Draw("same");
+		if (sim_fit != NULL) sim_fit->Draw("same");
 		
 		hs->Write("",TObject::kOverwrite);
 		fit->Write(fitname.c_str(),TObject::kOverwrite);
@@ -341,12 +342,12 @@ int main(int argc, char** argv)
 		{
 			aLegend->AddEntry(datahisto,"Data","f");
 			aLegend->AddEntry(simhisto,"no CM, var. threshold","f");
-			aLegend->AddEntry(no_cm_histo,Form("no CM, threshold %.2f", fabs(threshold)),"l");
-			aLegend->AddEntry(sim_fit, Form("threshold variations equals to %.2f CM", fabs(sim_cm_fraction)),"l");
+			aLegend->AddEntry(no_cm_histo,Form("no CM, threshold %.2f", fabs(threshold)),"f");
 		}
 		if (padcounter < 4)
 		{
 			aLegend->AddEntry(fit,Form("Fit CM fraction %.2f", fabs(cm_fraction)),"l");
+			aLegend->AddEntry(sim_fit, Form("threshold variations equals to %.2f CM", fabs(sim_cm_fraction)),"l");
 		}
 		stackcanvas->Update();
 		padcounter++;

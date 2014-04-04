@@ -28,11 +28,11 @@ TH1D* cmnTest(int nEvents, double noiseSigma, double cmnSigma, std::string histo
 		if (histoname == "h_n_hits_dut_b_B" || histoname == "h_n_hits_fix_b_B") first_strip = 127, last_strip = 254;
 		
 		//TODO: something wrong here!
-		if (i == 0) std::cout << first_strip << " " << last_strip << std::endl;
+		// if (i == 0) std::cout << first_strip << " " << last_strip << std::endl;
 		
 		for (int j = first_strip; j < last_strip ; ++j) 
 		{
-			if (i == 0) std::cout << j << " " << thresholds->GetBinContent(j) << std::endl;
+			// if (i == 0) std::cout << j << " " << thresholds->GetBinContent(j) << std::endl;
 			if(thresholds->GetBinContent(j) > 0) // strip is not a bad strip
 			// this ensures that i only loop over the active strips
 			{
