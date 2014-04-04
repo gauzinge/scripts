@@ -10,7 +10,7 @@ ROOTLIBFLAGS=`root-config --libs`
 
 COMP=g++ $(COMPILERFLAGS) $(INCLUDEFLAGS)
 
-all: cm_analysis fit_cmdata
+all: fit_cmdata
 
 lib/read_histograms.o: src/read_histograms.cc src/read_histograms.h
 	$(COMP) $(ROOTFLAGS) -c src/read_histograms.cc -o lib/read_histograms.o
@@ -51,15 +51,6 @@ fit_cmdata: src/fit_cmdata.cc \
 	lib/cm_toy.o \
 	lib/read_histograms.o -o fit_cm_data
 	
-cm_analysis: src/cm_analysis.cc \
-	lib/read_histograms.o \
-	lib/conditions_data.o \
-	lib/plotstyle.o
-	$(COMP) $(ROOTFLAGS) $(ROOTLIBFLAGS) \
-	src/cm_analysis.cc \
-	lib/conditions_data.o \
-	lib/plotstyle.o \
-	lib/read_histograms.o -o cm_analyis
 	
 	
 clean:
