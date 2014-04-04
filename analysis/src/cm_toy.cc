@@ -33,7 +33,7 @@ TH1D* cmnTest(int nEvents, double noiseSigma, double cmnSigma, std::string histo
 		for (int j = first_strip; j < last_strip ; ++j) 
 		{
 			// if (i == 0) std::cout << j << " " << thresholds->GetBinContent(j) << std::endl;
-			if(thresholds->GetBinContent(j) > 0) // strip is not a bad strip
+			if(thresholds->GetBinContent(j) != 0) // strip is not a bad strip
 			// this ensures that i only loop over the active strips
 			{
 				stripValue = cmn + myDice.Gaus(0,noiseSigma);
