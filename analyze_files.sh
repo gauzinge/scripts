@@ -33,6 +33,7 @@ export PYTHONPATH="/afs/cern.ch/user/g/gauzinge/scratch/CMSSW_6_2_0/src/analysis
 export PATH="~/bin:$PATH"
 
 # actual script
+export BADSTRIPS='/afs/cern.ch/user/g/gauzinge/tb_data'
 cmsswdir='/afs/cern.ch/user/g/gauzinge/scratch/CMSSW_6_2_0/src'
 homedir='/afs/cern.ch/user/g/gauzinge/'
 echo 'Script for batched analysis of several runs!'
