@@ -1,5 +1,8 @@
 #include "conditions_data.h"
 
+#ifndef conditions_data_cc_
+#define conditions_data_cc_
+
 conditions_data::conditions_data()
 {
 	run_number = 0;
@@ -210,3 +213,5 @@ double conditions_data::misc_parameter()
 {
 	return this->misc_param;
 }
+
+#endif

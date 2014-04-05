@@ -6,8 +6,8 @@ echo 'Setting Environment!'
 
 # set the environment
 export PLATFORM=x86_64-slc6
-export GCC_VERSION=4.6
-export GCC_VERSION_SHORT=46
+export GCC_VERSION=4.7
+export GCC_VERSION_SHORT=47
 export PYTHON_VERSION=2.7.3
 export ROOT_VERSION=5.34.12
 
@@ -33,7 +33,7 @@ export PYTHONPATH="/afs/cern.ch/user/g/gauzinge/scratch/CMSSW_6_2_0/src/analysis
 export PATH="~/bin:$PATH"
 
 # actual script
-BADSTRIPS='/afs/cern.ch/user/g/gauzinge/tb_data'
+BADSTRIPS='/afs/cern.ch/user/g/gauzinge/tb_data/bad_strips.txt'
 cmsswdir='/afs/cern.ch/user/g/gauzinge/scratch/CMSSW_6_2_0/src'
 homedir='/afs/cern.ch/user/g/gauzinge/'
 echo 'Script for batched running of Stub Finder!'

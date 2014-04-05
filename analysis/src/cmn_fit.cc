@@ -1,5 +1,8 @@
 #include "cmn_fit.h"
 
+#ifndef cmn_fit_cc_
+#define cmn_fit_cc_
+
 double findMaximum(TH1D* histogram)
 {
 	int maxbin = histogram->GetMaximumBin();
@@ -112,3 +115,5 @@ TH1D* createNoiseDistribution(double threshold, double cmnFraction, int nEvents,
 	}
 	return noiseDistribution;
 }
+
+#endif

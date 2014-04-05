@@ -25,9 +25,11 @@
 #include <iostream>
 #include <vector>
 #include <string>
- 
+
+#include <TSystem.h>
 #include <TApplication.h>
 #include <TColor.h>
+#include <TMath.h>
 #include <TROOT.h>
 #include <TStyle.h>
 #include <TKey.h>
@@ -44,11 +46,15 @@
 #include <TGraph.h>
 #include <TMultiGraph.h>
 
-// for use in CINT as root script!
 
-// back to per cbc version!
+// for use in CINT as root script!
 int fit_cmdata(std::string filename, std::string cbc)
 {
+	// #ifdef ROOT_VERSION
+	// gSystem->AddIncludePath(" -I$HOME/analysis/src");
+	// gSystem->AddLinkedLibs("-L$HOME/analysis/lib");
+	// #endif
+	
 	// decode conditions data
 	conditions_data mycondata(filename);
 	
@@ -134,6 +140,12 @@ int fit_cmdata(std::string filename, std::string cbc)
 		no_cm_histo->SetLineColor(LC(11));
 		hs->Add(no_cm_histo);
 		
+		if (padcounter == 1)
+		{
+			aLegend->AddEntry(datahisto,"Data","f");
+			aLegend->AddEntry(no_cm_histo,Form("no CM, threshold %.2f", fabs(threshold)),"f");
+		}
+		
 		//now simulate 
 		// check that I only use the histograms for top or bottom sensor
 		if (*histos != "h_n_hits_fix_B" && *histos != "h_n_hits_fix_A") 
@@ -151,6 +163,11 @@ int fit_cmdata(std::string filename, std::string cbc)
 			if (padcounter ==1 ) aLegend->AddEntry(simhisto,"no CM, var. threshold","f");
 		}
 		
+		if (padcounter < 4)
+		{
+			aLegend->AddEntry(fit,Form("Fit CM fraction %.2f", fabs(cm_fraction)),"l");
+		}
+		
 		hs->Draw("nostack");
 		hs->GetXaxis()->SetTitle("# of Hits");
 		fit->Draw("same");
@@ -158,15 +175,6 @@ int fit_cmdata(std::string filename, std::string cbc)
 		hs->Write("",TObject::kOverwrite);
 		fit->Write(fitname.c_str(),TObject::kOverwrite);
 		
-		if (padcounter == 1)
-		{
-			aLegend->AddEntry(datahisto,"Data","f");
-			aLegend->AddEntry(no_cm_histo,Form("no CM, threshold %.2f", fabs(threshold)),"l");
-		}
-		if (padcounter < 4)
-		{
-			aLegend->AddEntry(fit,Form("Fit CM fraction %.2f", fabs(cm_fraction)),"l");
-		}
 		stackcanvas->Update();
 		padcounter++;
 	}
@@ -293,6 +301,12 @@ int main(int argc, char** argv)
 		no_cm_histo->SetLineColor(LC(11));
 		hs->Add(no_cm_histo);
 		
+		if (padcounter == 1)
+		{
+			aLegend->AddEntry(datahisto,"Data","f");
+			aLegend->AddEntry(no_cm_histo,Form("no CM, threshold %.2f", fabs(threshold)),"f");
+		}
+		
 		//now simulate 
 		// check that I only use the histograms for top or bottom sensor
 		if (*histos != "h_n_hits_fix_B" && *histos != "h_n_hits_fix_A") 
@@ -310,6 +324,11 @@ int main(int argc, char** argv)
 			if (padcounter ==1) aLegend->AddEntry(simhisto,"no CM, var. threshold","f");
 		}
 		
+		if (padcounter < 4)
+		{
+			aLegend->AddEntry(fit,Form("Fit CM fraction %.2f", fabs(cm_fraction)),"l");
+		}
+		
 		hs->Draw("nostack");
 		hs->GetXaxis()->SetTitle("# of Hits");
 		fit->Draw("same");
@@ -317,15 +336,6 @@ int main(int argc, char** argv)
 		hs->Write("",TObject::kOverwrite);
 		fit->Write(fitname.c_str(),TObject::kOverwrite);
 		
-		if (padcounter == 1)
-		{
-			aLegend->AddEntry(datahisto,"Data","f");
-			aLegend->AddEntry(no_cm_histo,Form("no CM, threshold %.2f", fabs(threshold)),"f");
-		}
-		if (padcounter < 4)
-		{
-			aLegend->AddEntry(fit,Form("Fit CM fraction %.2f", fabs(cm_fraction)),"l");
-		}
 		stackcanvas->Update();
 		padcounter++;
 	}

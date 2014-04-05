@@ -1,5 +1,8 @@
 #include "bad_strips.h"
 
+#ifndef bad_strips_cc_
+#define bad_strips_cc_
+
 bad_strips::bad_strips(std::string bad_strip_file)
 {	
 	//read the file with bad strips
@@ -95,3 +98,5 @@ bool bad_strips::strip_bad(int sensor, int strip)
 	if (this->bad_strip_map[sensor].find(strip) != this->bad_strip_map[sensor].end()) return true;
 	else return false;
 }
+
+#endif

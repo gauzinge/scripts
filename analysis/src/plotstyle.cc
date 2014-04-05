@@ -6,6 +6,9 @@
 
 #include "plotstyle.h"
 
+#ifndef plotstyle_cc_
+#define plotstyle_cc_
+
 void set_plotstyle() {
     gStyle->SetOptStat(1000001110);
     gStyle->SetOptFit(0011);
@@ -77,3 +80,5 @@ Color_t LC(const unsigned int& plotIndex)  //Libre Office Color Scheme
     }
     return TColor::GetColor(colorCode.c_str());
 }
+
+#endif

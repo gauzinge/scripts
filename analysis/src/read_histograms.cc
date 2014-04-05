@@ -1,5 +1,7 @@
 #include "read_histograms.h"
 
+#ifndef read_histograms_cc_
+#define read_histograms_cc_
 
 TH1D* get_histogram(std::string filename, std::string foldername, std::string histoname)
 {
@@ -27,3 +29,4 @@ TH1D* get_histogram(std::string filename, std::string foldername, std::string hi
 	return NULL;
 }
 
+#endif

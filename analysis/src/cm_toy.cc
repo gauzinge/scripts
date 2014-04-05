@@ -1,5 +1,8 @@
 #include "cm_toy.h"
 
+#ifndef cm_toy_cc_
+#define cm_toy_cc_
+
 TH1D* cmnTest(int nEvents, double noiseSigma, double cmnSigma, std::string histoname, TH1D* thresholds)
 {
 	TRandom3 myDice;
@@ -19,8 +22,8 @@ TH1D* cmnTest(int nEvents, double noiseSigma, double cmnSigma, std::string histo
 		hitCount = 0;
 		
 		//this loop has to go over the right strips of the right sensor
-		int first_strip;
-		int last_strip;
+		int first_strip = 0;
+		int last_strip = 0;
 		
 		if (histoname == "h_n_hits_dut_t_A" || histoname == "h_n_hits_fix_t_A") first_strip = 0, last_strip = 127;
 		if (histoname == "h_n_hits_dut_t_B" || histoname == "h_n_hits_fix_t_B") first_strip = 127, last_strip = 254;
@@ -47,3 +50,4 @@ TH1D* cmnTest(int nEvents, double noiseSigma, double cmnSigma, std::string histo
 	}
 	return hitCountHisto;
 }
+#endif
