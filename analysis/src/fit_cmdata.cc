@@ -99,7 +99,7 @@ int fit_cmdata(std::string filename, std::string cbc)
 	
 	// Save
 	std::string resultfilename = "/afs/cern.ch/user/g/gauzinge/tb_data/results/cm_analysis/run" + mycondata.runstring() + "_cmAnalyis.root";
-	TFile* resultfile =new TFile(resultfilename.c_str(),"RECREATE");
+	TFile* resultfile =new TFile(resultfilename.c_str(),"UPDATE");
 	
 	int padcounter = 1;
 	
@@ -260,7 +260,7 @@ int main(int argc, char** argv)
 	
 	// Save
 	std::string resultfilename = "/afs/cern.ch/user/g/gauzinge/tb_data/results/cm_analysis/run" + mycondata.runstring() + "_cmAnalyis.root";
-	TFile* resultfile =new TFile(resultfilename.c_str(),"RECREATE");
+	TFile* resultfile =new TFile(resultfilename.c_str(),"UPDATE");
 	
 	int padcounter = 1;
 	
