@@ -172,7 +172,7 @@ int fit_cmdata(std::string filename, std::string cbc)
 		hs->GetXaxis()->SetTitle("# of Hits");
 		fit->Draw("same");
 		
-		hs->Write("",TObject::kOverwrite);
+		hs->Write(histoname.c_str(),TObject::kOverwrite);
 		fit->Write(fitname.c_str(),TObject::kOverwrite);
 		
 		stackcanvas->Update();
@@ -333,7 +333,7 @@ int main(int argc, char** argv)
 		hs->GetXaxis()->SetTitle("# of Hits");
 		fit->Draw("same");
 		
-		hs->Write("",TObject::kOverwrite);
+		hs->Write(histoname.c_str(),TObject::kOverwrite);
 		fit->Write(fitname.c_str(),TObject::kOverwrite);
 		
 		stackcanvas->Update();
