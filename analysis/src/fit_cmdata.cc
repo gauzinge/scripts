@@ -69,7 +69,7 @@ int fit_cmdata(std::string filename, std::string cbc)
 	gStyle->SetOptStat(1111111);
 	
 	// hardcoded!!! folder and histogramnames
-	std::string foldername = "cmn";
+	std::string foldername = "cmn/FIX";
 	std::vector<std::string> histonames;
 	
 	if (cbc == 'A')
@@ -229,7 +229,7 @@ int main(int argc, char** argv)
 	gStyle->SetOptStat(1111111);
 	
 	// hardcoded!!! folder and histogramnames
-	std::string foldername = "cmn";
+	std::string foldername = "cmn/FIX";
 	std::vector<std::string> histonames;
 	
 	if (cbc == 'A')
